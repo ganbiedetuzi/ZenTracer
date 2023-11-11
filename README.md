@@ -1,6 +1,8 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/hluwa/ZenTracer/master/icon.png" alt="Logo"/>
 </p>
+### 2023.11.11更新
+更新：适配了新版的frida使用的是app的进程名不再是app的包名了,只需要在config.py文件中设置你是否为新版本的frida
 
 ### screenshot
 ![](./screenshot.png)
