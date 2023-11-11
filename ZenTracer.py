@@ -10,7 +10,7 @@ import frida
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-
+from config import Config
 APP = None  # type: ZenTracer
 
 scripts = []
@@ -249,9 +249,10 @@ class ListWindow(QDialog):
 def start_trace(app):
     global scripts
     global device
-
     def _attach(pid):
-        if not device: return
+        if not device:
+            app.log("no devices")
+            return
         app.log("attach '{}'".format(pid))
         session = device.attach(pid)
         session.enable_child_gating()
@@ -269,7 +270,11 @@ def start_trace(app):
     black_s = str(app.black_regex_list).replace('u\'', '\'')
     device.on("child-added", _on_child_added)
     application = device.get_frontmost_application()
-    target = 'Gadget' if application.identifier == 're.frida.Gadget' else application.identifier
+    if Config.IsNewFrida:
+        target = 'Gadget' if application.identifier == 're.frida.Gadget' else application.name
+    else:
+        target = 'Gadget' if application.identifier == 're.frida.Gadget' else application.identifier
+
     for process in device.enumerate_processes():
         if target in process.name:
             _attach(process.name)
